@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<packaging>jar</packaging>
+	<artifactId>dashboard-app</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>app</name>	
+	<description>App module AFS Dashboard</description>
+
+	<parent>
+		<groupId>com.stl.afs.dashboard</groupId>
+		<artifactId>dashboard</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<properties>
+		<proguard.version>6.2.2</proguard.version>
+		<proguard.maven.plugin.version>2.3.1</proguard.maven.plugin.version>
+		<main.class>com.stl.afs.dashboard.Starter</main.class>
+		<main.servlet>com.stl.afs.dashboard.ServletInitializer</main.servlet>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.stl.afs.dashboard.core</groupId>
+			<artifactId>core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.wvengen</groupId>
+				<artifactId>proguard-maven-plugin</artifactId>
+				<version>${proguard.maven.plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>proguard</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<proguardVersion>${proguard.version}</proguardVersion>
+					<obfuscate>true</obfuscate>
+					<proguardInclude>proguard.cfg</proguardInclude>
+					<libs>
+						<lib>${java.home}/lib/rt.jar</lib>
+					</libs>
+					<assembly>
+						<inclusions>
+							<groupId>com.stl.afs.dashboard.core</groupId>
+							<artifactId>core</artifactId>
+						</inclusions>
+					</assembly>
+				</configuration>
+
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.proguard</groupId>
+						<artifactId>proguard-base</artifactId>
+						<version>${proguard.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>${main.class}</mainClass>
+					<excludes>
+						<exclude>
+							<groupId>com.stl.afs.dashboard.core</groupId>
+							<artifactId>core</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+				
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
